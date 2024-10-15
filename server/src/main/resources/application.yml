@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: server
+  datasource:
+    generate-unique-name: false
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
