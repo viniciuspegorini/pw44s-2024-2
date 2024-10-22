@@ -1,7 +1,7 @@
 package br.edu.utfpr.pb.pw44s.server.controller;
 
-import br.edu.utfpr.pb.pw44s.server.model.Category;
-import br.edu.utfpr.pb.pw44s.server.service.ICategoryService;
+import br.edu.utfpr.pb.pw44s.server.model.Product;
+import br.edu.utfpr.pb.pw44s.server.service.IProductService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,61 +15,61 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("categories")
-public class CategoryController {
+@RequestMapping("products")
+public class ProductController {
 
-    private final ICategoryService categoryService;
+    private final IProductService productService;
 
-    public CategoryController(ICategoryService categoryService) {
-        this.categoryService = categoryService;
+    public ProductController(IProductService productService) {
+        this.productService = productService;
     }
 
     /**
      * Persiste uma categoria ao enviar uma requisição HTTP POST com um JSON representando uma
      * categoria no corpo. POST para http://localhost:8080/categories
-     * @param category
+     * @param product
      * @return
      */
     @PostMapping
-    public ResponseEntity<Category> create(@RequestBody @Valid Category category) {
-        Category categoryCreated = categoryService.save(category);
+    public ResponseEntity<Product> create(@RequestBody @Valid Product product) {
+        Product productCreated = productService.save(product);
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(categoryCreated.getId()).toUri();
+                .buildAndExpand(productCreated.getId()).toUri();
 
-        return ResponseEntity.created(location).body(categoryCreated);
+        return ResponseEntity.created(location).body(productCreated);
     }
 
     // GET para http://localhost:8080/categories/1
     @GetMapping("{id}")
-    public ResponseEntity<Category> findOne(@PathVariable Long id) {
-        return ResponseEntity.ok(categoryService.findById(id));
+    public ResponseEntity<Product> findOne(@PathVariable Long id) {
+        return ResponseEntity.ok(productService.findById(id));
     }
 
     // GET para http://localhost:8080/categories
     @GetMapping
-    public ResponseEntity<List<Category>> findAll() {
-        return ResponseEntity.ok(categoryService.findAll());
+    public ResponseEntity<List<Product>> findAll() {
+        return ResponseEntity.ok(productService.findAll());
     }
 
     // GET para http://localhost:8080/categories/exists/1
     @GetMapping("exists/{id}")
     public ResponseEntity<Boolean> exists(@PathVariable Long id) {
-        return ResponseEntity.ok(categoryService.exists(id));
+        return ResponseEntity.ok(productService.exists(id));
     }
 
     @GetMapping("count")
     public ResponseEntity<Long> count() {
-        return ResponseEntity.ok(categoryService.count());
+        return ResponseEntity.ok(productService.count());
     }
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
-        categoryService.delete(id);
+        productService.delete(id);
     }
     // GET http://localhost:8080/categories/page?page=1&size=3
     @GetMapping("page")
-    public ResponseEntity<Page<Category>> findPage(
+    public ResponseEntity<Page<Product>> findPage(
                                     @RequestParam int page,
                                     @RequestParam int size,
                                     @RequestParam(required = false) String order,
@@ -81,7 +81,7 @@ public class CategoryController {
             pageRequest = PageRequest.of(page, size,
                     asc ? Sort.Direction.ASC: Sort.Direction.DESC, order);
         }
-        return ResponseEntity.ok(categoryService.findAll(pageRequest));
+        return ResponseEntity.ok(productService.findAll(pageRequest));
     }
 
 
