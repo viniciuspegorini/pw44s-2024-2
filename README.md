@@ -52,7 +52,7 @@ Neste projeto, os alunos terão a oportunidade de aplicar seus conhecimentos em 
 
 ## Datas de entrega:
 
-#### Primeira entrega: 11/11/2024 e 12/11/2024
+#### Primeira entrega: 18/11/2024 e 19/11/2024
 Na primeira entrega deve estar pronto apenas o lado **servidor** da aplicação, ou seja, a API REST desenvolvida com o *framework* Spring Boot. A apresentação dos *endpoints* da API será via requisições HTTP utilizando o Postman ou Insomnia, juntamente com a defesa do código-fonte desenvolvido.
 
 #### Entrega final: 17/02/2025 e 18/02/2025
@@ -75,7 +75,7 @@ Os clientes deverão poder consultar seu histórico de compras com o detalhe dos
 1. A aplicação deverá conter uma página para listar todos os produtos, utilizar como exemplo os sites de compra disponíveis na internet, a lista de produtos deve conter o nome, valor e a imagem do produto (pode ser uma URL externa).
 2. A aplicação deve conter uma página para exibir um produto com detalhes, apresentando o nome, valor, descrição, imagem e botão para adicionar em uma lista de compras.
 3. A aplicação deve conter uma página que representa o carrinho de compras, essa tela vai listar os itens adicionados na lista de compras, com a possibilidade de ajustar a quantidade dos itens adicionados e um botão para ir para tela de finalizar compra.
-4. Para finalizar a compra é necessário estar autenticado, para isso criar uma tela para cadastro de cliente (usuário) e uma tela para autenticação.
+4. Para finalizar a compra é necessário estar autenticado, para isso criar uma tela para cadastro de cliente (usuário) e uma tela para autenticação, clientes com o mesmo nome de usuário não devem ser permitidos.
 5. Após autenticado exibir a tela com o resumo da compra e um botão para finalizar a compra, nessa etapa os dados devem ser enviados ao servidor e a compra deve ser finalizada.
 6. A página de lista de produtos, produto individual e carrinho de compras devem ser exibidas para todos os usuários, mesmo não autenticados.
 
