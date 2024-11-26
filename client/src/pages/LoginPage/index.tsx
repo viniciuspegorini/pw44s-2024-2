@@ -2,14 +2,8 @@ import {ChangeEvent, useState} from "react";
 import axios from "axios";
 import './index.css';
 
-export function UserSignupPage () {
+export function LoginPage () {
     const [form, setForm] = useState({
-        displayName: '',
-        username: '',
-        password: '',
-    });
-    const [errors, setErrors] = useState({
-        displayName: '',
         username: '',
         password: '',
     });
@@ -22,21 +16,13 @@ export function UserSignupPage () {
                 [name]: value,
             }
         })
-
-        setErrors( (previousForm) => {
-            return {
-                ...previousForm,
-                [name]: undefined,
-            }
-        })
     }
 
-    const onClickSignup = () => {
-        console.log('Cadastrou o usuário com o nome: ' + form.displayName);
+    const onClickLogin = () => {
         console.log(form);
 
         console.log(1);
-        axios.post('http://localhost:8080/users', form)
+        axios.post('http://localhost:8080/login', form)
             .then((response) => {
                 console.log(2);
                 console.log(response)
@@ -44,12 +30,9 @@ export function UserSignupPage () {
             .catch((error) => {
                 console.log(3);
                 console.log(error)
-                if (error.response.data.validationErrors) {
-                    setErrors(error.response.data.validationErrors);
-                }
             }).finally(() => {
-                console.log(4);
-            });
+            console.log(4);
+        });
         console.log(5);
     }
 
@@ -58,28 +41,14 @@ export function UserSignupPage () {
             <form>
                 <div className="text-center">
                     <h1 className="h3 mb-3 fw-normal">
-                        Novo Usuário - {form.displayName}
+                        Login
                     </h1>
                 </div>
 
                 <div className="form-floating">
                     <input
                         type="text"
-                        className={errors.displayName ? "form-control is-invalid" : "form-control"}
-                        placeholder="Informe o seu nome"
-                        name="displayName"
-                        id="displayName"
-                        onChange={onChange}
-                        value={form.displayName}
-                    />
-                    <label htmlFor="displayName">Informe o seu nome</label>
-                    {errors.displayName && (<div className="invalid-feedback">{errors.displayName}</div>)}
-                </div>
-
-                <div className="form-floating">
-                    <input
-                        type="text"
-                        className={errors.username ? "form-control is-invalid" : "form-control"}
+                        className="form-control"
                         placeholder="Informe o seu usuário"
                         name="username"
                         id="username"
@@ -87,13 +56,12 @@ export function UserSignupPage () {
                         value={form.username}
                     />
                     <label htmlFor="username">Informe o seu usuário</label>
-                    {errors.username && (<div className="invalid-feedback">{errors.username}</div>)}
                 </div>
 
                 <div className="form-floating">
                     <input
                         type="password"
-                        className={errors.password ? "form-control is-invalid" : "form-control"}
+                        className="form-control"
                         placeholder="Informe a sua senha"
                         name="password"
                         id="password"
@@ -101,14 +69,13 @@ export function UserSignupPage () {
                         value={form.password}
                     />
                     <label htmlFor="password">Informe a sua senha</label>
-                    {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
                 </div>
 
                 <div className="text-center">
                     <button
                         type="button"
                         className="btn btn-primary"
-                        onClick={onClickSignup}>Cadastrar
+                        onClick={onClickLogin}>Login
                     </button>
                 </div>
             </form>
