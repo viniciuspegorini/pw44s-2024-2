@@ -1,7 +1,7 @@
 import {ChangeEvent, useState} from "react";
 import './index.css';
 import {IUserSignup} from "@/commons/interfaces.ts";
-import {api} from "@/lib/axios.ts";
+import AuthService from "@/service/AuthService";
 
 export function UserSignupPage () {
     const [form, setForm] = useState<IUserSignup>({
@@ -14,6 +14,8 @@ export function UserSignupPage () {
         username: '',
         password: '',
     });
+    const [pendingApiCall, setPendingApiCall] = useState(false);
+    const [apiError, setApiError] = useState(false);
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -32,26 +34,21 @@ export function UserSignupPage () {
         })
     }
 
-    const onClickSignup = () => {
-        console.log('Cadastrou o usuário com o nome: ' + form.displayName);
-        console.log(form);
+    const onClickSignup = async () => {
+        setPendingApiCall(true);
+        setApiError(false);
+        const response = await AuthService.signup(form);
 
-        console.log(1);
-        api.post('/users', form)
-            .then((response) => {
-                console.log(2);
-                console.log(response)
-            })
-            .catch((error) => {
-                console.log(3);
-                console.log(error)
-                if (error.response.data.validationErrors) {
-                    setErrors(error.response.data.validationErrors);
-                }
-            }).finally(() => {
-                console.log(4);
-            });
-        console.log(5);
+        if (response.status === 200 || response.status === 201) {
+            setPendingApiCall(false);
+            console.log('Usuário cadastrado com sucesso!');
+        } else {
+            if (response.data.validationErrors) {
+                setErrors(response.data.validationErrors);
+            }
+            setApiError(true);
+            setPendingApiCall(false);
+        }
     }
 
     return (
@@ -104,9 +101,10 @@ export function UserSignupPage () {
                     <label htmlFor="password">Informe a sua senha</label>
                     {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
                 </div>
-
+                {apiError && <div className="alert alert-danger">Falha ao autenticar-se!</div>}
                 <div className="text-center">
                     <button
+                        disabled={pendingApiCall}
                         type="button"
                         className="btn btn-primary"
                         onClick={onClickSignup}>Cadastrar
