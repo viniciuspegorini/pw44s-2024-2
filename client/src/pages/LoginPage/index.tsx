@@ -1,12 +1,16 @@
 import {ChangeEvent, useState} from "react";
-import axios from "axios";
 import './index.css';
+import {IUserLogin} from "@/commons/interfaces.ts";
+import AuthService from "@/service/AuthService";
 
 export function LoginPage () {
-    const [form, setForm] = useState({
+    const [form, setForm] = useState<IUserLogin>({
         username: '',
         password: '',
     });
+
+    const [pendingApiCall, setPendingApiCall] = useState(false);
+    const [apiError, setApiError] = useState(false);
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -18,22 +22,19 @@ export function LoginPage () {
         })
     }
 
-    const onClickLogin = () => {
-        console.log(form);
+    const onClickLogin = async () => {
+        setPendingApiCall(true);
+        setApiError(false);
 
-        console.log(1);
-        axios.post('http://localhost:8080/login', form)
-            .then((response) => {
-                console.log(2);
-                console.log(response)
-            })
-            .catch((error) => {
-                console.log(3);
-                console.log(error)
-            }).finally(() => {
-            console.log(4);
-        });
-        console.log(5);
+        const response = await AuthService.login(form);
+        if (response.status === 200) {
+            setPendingApiCall(false);
+            console.log('Login efetuado com sucesso!');
+        } else {
+            setPendingApiCall(false);
+            setApiError(true);
+            console.log('Falha ao efetuar login!');
+        }
     }
 
     return (
@@ -70,9 +71,11 @@ export function LoginPage () {
                     />
                     <label htmlFor="password">Informe a sua senha</label>
                 </div>
+                {apiError && <div className="alert alert-danger">Falha ao autenticar-se!</div>}
 
                 <div className="text-center">
                     <button
+                        disabled={pendingApiCall}
                         type="button"
                         className="btn btn-primary"
                         onClick={onClickLogin}>Login
