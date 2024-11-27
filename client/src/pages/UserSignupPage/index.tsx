@@ -1,9 +1,10 @@
 import {ChangeEvent, useState} from "react";
-import axios from "axios";
 import './index.css';
+import {IUserSignup} from "@/commons/interfaces.ts";
+import {api} from "@/lib/axios.ts";
 
 export function UserSignupPage () {
-    const [form, setForm] = useState({
+    const [form, setForm] = useState<IUserSignup>({
         displayName: '',
         username: '',
         password: '',
@@ -36,7 +37,7 @@ export function UserSignupPage () {
         console.log(form);
 
         console.log(1);
-        axios.post('http://localhost:8080/users', form)
+        api.post('/users', form)
             .then((response) => {
                 console.log(2);
                 console.log(response)
