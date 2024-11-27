@@ -2,6 +2,7 @@ import {ChangeEvent, useState} from "react";
 import './index.css';
 import {IUserSignup} from "@/commons/interfaces.ts";
 import AuthService from "@/service/AuthService";
+import { ButtonWithProgress } from "@/components/ButtonWithProgress";
 
 export function UserSignupPage () {
     const [form, setForm] = useState<IUserSignup>({
@@ -103,12 +104,12 @@ export function UserSignupPage () {
                 </div>
                 {apiError && <div className="alert alert-danger">Falha ao autenticar-se!</div>}
                 <div className="text-center">
-                    <button
+                    <ButtonWithProgress
                         disabled={pendingApiCall}
-                        type="button"
-                        className="btn btn-primary"
-                        onClick={onClickSignup}>Cadastrar
-                    </button>
+                        pendingApiCall={pendingApiCall}
+                        className="w-100 btn btn-lg btn-primary mb-3"
+                        text="Cadastrar"
+                        onClick={onClickSignup} />
                 </div>
             </form>
         </main>
