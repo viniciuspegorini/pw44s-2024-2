@@ -5,7 +5,6 @@ interface IButtonWithProgress {
     text: string;
     onClick: () => void;
   }
-  
   export function ButtonWithProgress({
     className,
     disabled,

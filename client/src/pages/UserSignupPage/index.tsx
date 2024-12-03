@@ -3,6 +3,7 @@ import './index.css';
 import {IUserSignup} from "@/commons/interfaces.ts";
 import AuthService from "@/service/AuthService";
 import { ButtonWithProgress } from "@/components/ButtonWithProgress";
+import { Link, useNavigate } from "react-router-dom";
 
 export function UserSignupPage () {
     const [form, setForm] = useState<IUserSignup>({
@@ -17,6 +18,8 @@ export function UserSignupPage () {
     });
     const [pendingApiCall, setPendingApiCall] = useState(false);
     const [apiError, setApiError] = useState(false);
+    const [apiSuccess, setApiSuccess] = useState(false);
+    const navigate = useNavigate();
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -41,8 +44,11 @@ export function UserSignupPage () {
         const response = await AuthService.signup(form);
 
         if (response.status === 200 || response.status === 201) {
-            setPendingApiCall(false);
-            console.log('Usuário cadastrado com sucesso!');
+            // setPendingApiCall(false);
+            setApiSuccess(true);
+            setTimeout(() => {
+                navigate('/login');
+            }, 2000);
         } else {
             if (response.data.validationErrors) {
                 setErrors(response.data.validationErrors);
@@ -57,7 +63,7 @@ export function UserSignupPage () {
             <form>
                 <div className="text-center">
                     <h1 className="h3 mb-3 fw-normal">
-                        Novo Usuário - {form.displayName}
+                        Novo Usuário
                     </h1>
                 </div>
 
@@ -103,6 +109,7 @@ export function UserSignupPage () {
                     {errors.password && (<div className="invalid-feedback">{errors.password}</div>)}
                 </div>
                 {apiError && <div className="alert alert-danger">Falha ao autenticar-se!</div>}
+                {apiSuccess && <div className="alert alert-success">Cadastro realizado com sucesso!</div>}
                 <div className="text-center">
                     <ButtonWithProgress
                         disabled={pendingApiCall}
@@ -112,6 +119,10 @@ export function UserSignupPage () {
                         onClick={onClickSignup} />
                 </div>
             </form>
+            <div className="text-center">
+                Já possui cadastro?
+                <Link className="link-primary" to="/login">Login</Link>
+            </div>
         </main>
     )
 }
