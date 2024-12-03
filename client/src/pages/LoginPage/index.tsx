@@ -2,6 +2,8 @@ import {ChangeEvent, useState} from "react";
 import './index.css';
 import {IUserLogin} from "@/commons/interfaces.ts";
 import AuthService from "@/service/AuthService";
+import { ButtonWithProgress } from "@/components/ButtonWithProgress";
+import { Link, useNavigate } from "react-router-dom";
 
 export function LoginPage () {
     const [form, setForm] = useState<IUserLogin>({
@@ -11,6 +13,8 @@ export function LoginPage () {
 
     const [pendingApiCall, setPendingApiCall] = useState(false);
     const [apiError, setApiError] = useState(false);
+    const [apiSuccess, setApiSuccess] = useState(false);
+    const navigate = useNavigate();
 
     const onChange = (event: ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
@@ -28,8 +32,11 @@ export function LoginPage () {
 
         const response = await AuthService.login(form);
         if (response.status === 200) {
-            setPendingApiCall(false);
-            console.log('Login efetuado com sucesso!');
+            //setPendingApiCall(false);
+            setApiSuccess(true);
+            setTimeout(() => {
+                navigate('/');
+            }, 2000);
         } else {
             setPendingApiCall(false);
             setApiError(true);
@@ -72,16 +79,20 @@ export function LoginPage () {
                     <label htmlFor="password">Informe a sua senha</label>
                 </div>
                 {apiError && <div className="alert alert-danger">Falha ao autenticar-se!</div>}
-
+                {apiSuccess && <div className="alert alert-success">Usuário autenticado com sucesso!</div>}
                 <div className="text-center">
-                    <button
+                    <ButtonWithProgress
                         disabled={pendingApiCall}
-                        type="button"
-                        className="btn btn-primary"
-                        onClick={onClickLogin}>Login
-                    </button>
+                        pendingApiCall={pendingApiCall}
+                        className="w-100 btn btn-lg btn-primary mb-3"
+                        text="Login"
+                        onClick={onClickLogin} />
                 </div>
             </form>
+            <div className="text-center">
+                Ainda não possui cadastro? 
+                <Link className="link-primary" to="/signup">Cadastrar-se</Link>
+            </div>
         </main>
     )
 }
