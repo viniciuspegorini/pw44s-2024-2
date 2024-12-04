@@ -1,9 +1,9 @@
-import { ICategory } from "@/commons/interfaces";
-import CategoryService from "@/service/CategoryService";
+import { IProduct } from "@/commons/interfaces";
+import ProductService from "@/service/ProductService";
 import { useEffect, useState } from "react";
 
-export function CategoryListPage() {
-    const [data, setData] = useState<ICategory[]>([]);
+export function ProductListPage() {
+    const [data, setData] = useState<IProduct[]>([]);
     const [apiError, setApiError] = useState<boolean>(false);
     const [apiMessage, setApiMessage] = useState<string>("");
     const [apiSuccess, setApiSuccess] = useState<boolean>(false);
@@ -15,8 +15,9 @@ export function CategoryListPage() {
     const loadData = async () => {
         setApiError(false);
         setApiMessage("");
+        setApiSuccess(false);
 
-        const response = await CategoryService.findAll();
+        const response = await ProductService.findAll();
         if (response.status === 200) {
             setData(response.data);
         } else {
@@ -32,15 +33,15 @@ export function CategoryListPage() {
         setApiSuccess(false);
 
         if (id) {
-            const response = await CategoryService.remove(id);
+            const response = await ProductService.remove(id);
             if (response.status === 204) {
                 // loadData();
-                setData(data.filter((category) => category.id !== id));
+                setData(data.filter((product) => product.id !== id));
                 setApiSuccess(true);
-                setApiMessage("Categoria removida com sucesso");
+                setApiMessage("Produto removido com sucesso");
             } else {
                 setApiError(true);
-                setApiMessage("Falha ao remover a categoria");
+                setApiMessage("Falha ao remover o produto");
             }
         }
     }
@@ -49,7 +50,7 @@ export function CategoryListPage() {
         <>
             <main className="container">
                 <div className="text-center">
-                    <span className="h3 mb-3 fw-normal" >Category List Page</span>
+                    <span className="h3 mb-3 fw-normal" >Product List Page</span>
                 </div>
                 <table className="table table-striped">
                     <thead>
@@ -61,15 +62,15 @@ export function CategoryListPage() {
                         </tr>
                     </thead>
                     <tbody>
-                        {data.map((category: ICategory) => (
-                            <tr key={category.id}>
-                                <td>{category.id}</td>
-                                <td>{category.name}</td>
+                        {data.map((product: IProduct) => (
+                            <tr key={product.id}>
+                                <td>{product.id}</td>
+                                <td>{product.name}</td>
                                 <td>...</td>
                                 <td>
                                     <button
                                         className="btn btn-danger"
-                                        onClick={() => onClickRemove(category.id)}
+                                        onClick={() => onClickRemove(product.id)}
                                     >
                                         Remover
                                     </button>
