@@ -5,6 +5,8 @@ import { Route, Routes } from "react-router-dom";
 import { AuthenticatedRoutes } from "../AuthenticatedRoutes";
 import { CategoryListPage } from "@/pages/CategoryListPage";
 import { ProductListPage } from "@/pages/ProductListPage";
+import { CategoryFormPage } from "@/pages/CategoryFormPage";
+import { ProductFormPage } from "@/pages/ProductFormPage";
 
 export function BaseRoutes() {
   return (
@@ -20,8 +22,12 @@ export function BaseRoutes() {
           <Route path="/home" element={<HomePage />} />
 
           <Route path="/categories" element={<CategoryListPage />} />
+          <Route path="/categories/new" element={<CategoryFormPage />} />
+          <Route path="/categories/:id" element={<CategoryFormPage />} />
           
           <Route path="/products" element={<ProductListPage />} />
+          <Route path="/products/new" element={<ProductFormPage />} />
+          <Route path="/products/:id" element={<ProductFormPage />} />
         </Route>
 
       </Routes>
